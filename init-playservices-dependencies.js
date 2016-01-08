@@ -11,7 +11,7 @@ var exec = require('child_process').exec;
 
 var androidHome = process.env.ANDROID_HOME;
 if( !androidHome ) {
-    throw new Error("Environment variable ANDROID_HOME is not set to Android SDK directory");
+    //throw new Error("Environment variable ANDROID_HOME is not set to Android SDK directory");
 }
 else {
     console.log("Found Android SDK at "+androidHome);
@@ -135,26 +135,26 @@ if (fs.existsSync(appCompatLib)) {
     return;
 }
 
-copyRecursiveSync(androidHome+"/extras/android/support/v7/appcompat/", appCompatLib+"/");
-copyRecursiveSync(androidHome+"/extras/android/support/v7/mediarouter/", mediaRouterLib+'/');
-copyRecursiveSync(androidHome+"/extras/google/google_play_services/libproject/google-play-services_lib/", playServicesLib+'/');
+//copyRecursiveSync(androidHome+"/extras/android/support/v7/appcompat/", appCompatLib+"/");
+//copyRecursiveSync(androidHome+"/extras/android/support/v7/mediarouter/", mediaRouterLib+'/');
+//copyRecursiveSync(androidHome+"/extras/google/google_play_services/libproject/google-play-services_lib/", playServicesLib+'/');
 
-// --- turn AppCompatLib into a library project
-prepareLibraryProject(appCompatLib, function() {
-    // --- turn MediarouterLib into a library project (after adjusting dependencies)
-    addLibraryReference(mediaRouterLib, ['../AppCompatLib'], function() {
-        prepareLibraryProject(mediaRouterLib, function() {
-            // --- turn PlayServicesLib into a library project
-            prepareLibraryProject(playServicesLib, function() {
-                // add all three libraries to current project
-                addLibraryReference("./platforms/android", ['libs/AppCompatLib','libs/MediarouterLib','libs/PlayServicesLib'], function() {
+//// --- turn AppCompatLib into a library project
+//prepareLibraryProject(appCompatLib, function() {
+//    // --- turn MediarouterLib into a library project (after adjusting dependencies)
+//    addLibraryReference(mediaRouterLib, ['../AppCompatLib'], function() {
+//        prepareLibraryProject(mediaRouterLib, function() {
+//            // --- turn PlayServicesLib into a library project
+//            prepareLibraryProject(playServicesLib, function() {
+//                // add all three libraries to current project
+//                addLibraryReference("./platforms/android", ['libs/AppCompatLib','libs/MediarouterLib','libs/PlayServicesLib'], function() {
 
-                    console.info("Plugin installed");
-                });
-            });
-        });
-    });
-});
+//                    console.info("Plugin installed");
+//                });
+//            });
+//        });
+//    });
+//});
 
 
 
