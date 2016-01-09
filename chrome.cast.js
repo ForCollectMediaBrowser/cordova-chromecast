@@ -1048,7 +1048,6 @@ chrome.cast.connectToId = function(id) {
             chrome.cast._emitConnecting();
         } catch (e) {
             console.error('Error in connectingListener', e);
-            return;
         }
 
         execute('selectRoute', id, function (err, obj) {
