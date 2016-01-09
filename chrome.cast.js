@@ -1038,28 +1038,45 @@ function onRouteClick() {
 	var id = this.getAttribute('data-routeid');
 
 	if (id) {
-		try {
-			chrome.cast._emitConnecting();
-		} catch(e) {
-			console.error('Error in connectingListener', e);
-		}
-
-		execute('selectRoute', id, function(err, obj) {
-			var sessionId = obj.sessionId;
-			var appId = obj.appId;
-			var displayName = obj.displayName;
-			var appImages = obj.appImages || [];
-			var receiver = new chrome.cast.Receiver(obj.receiver.label, obj.receiver.friendlyName, obj.receiver.capabilities || [], obj.volume || null);
-
-			var session = _sessions[sessionId] = new chrome.cast.Session(sessionId, appId, displayName, appImages, receiver);
-
-			_sessionListener && _sessionListener(session);
-		});
+	    chrome.cast.connectToId(id);
 	}
 }
 
+chrome.cast.connectToId = function(id) {
+    return new Promise(function (resolve, reject) {
+        try {
+            chrome.cast._emitConnecting();
+        } catch (e) {
+            console.error('Error in connectingListener', e);
+            reject();
+            return;
+        }
+
+        execute('selectRoute', id, function (err, obj) {
+            var sessionId = obj.sessionId;
+            var appId = obj.appId;
+            var displayName = obj.displayName;
+            var appImages = obj.appImages || [];
+            var receiver = new chrome.cast.Receiver(obj.receiver.label, obj.receiver.friendlyName, obj.receiver.capabilities || [], obj.volume || null);
+
+            var session = _sessions[sessionId] = new chrome.cast.Session(sessionId, appId, displayName, appImages, receiver);
+
+            _sessionListener && _sessionListener(session);
+            resolve();
+        });
+    });
+};
+
 chrome.cast.getRouteListElement = function() {
 	return _routeListEl;
+};
+
+chrome.cast.getRouteList = function () {
+    var routes = [];
+    for (var id in _routeList) {
+        routes.push(_routeList[id]);
+    }
+    return routes;
 };
 
 
